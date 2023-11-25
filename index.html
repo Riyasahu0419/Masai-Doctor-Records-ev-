@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Masai Doctor Records</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+  <style>
+div {
+    display: flex;
+    justify-content: space-around;
+  }
+  form {
+    margin: 0 auto;
+    margin-top: 50px;
+    width: 30%;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding: 30px;
+  }
+  
+  
+  table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 60%;
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+  }
+  
+  table td,
+  table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  table tr:nth-child(even) {
+    background-color: #8caacf;
+  }
+  
+  table tr:hover {
+    background-color: #ddd;
+  }
+  
+  table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0468aa;
+    color: white;
+    text-align: center;
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  input[type="text"],input[type="number"],
+  select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #2b619e;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #3973b6;
+}
+
+h1 {
+    text-align: center;
+    font-size: 50px;
+    text-transform: uppercase;
+    font-family: monospace;
+    color: #2b619e;
+    text-decoration: underline;
+}
+input[type="email"]
+{
+    
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+
+  </style>
+  <body>
+    <h1>Hospital - Doctor Records</h1>
+    <!-- Use this form for data input  -->
+    <div>
+
+        <form>
+            <input placeholder="Name" type="text" id="name" />
+      <br>
+      <input placeholder="Doctor ID" type="text" id="doctor_id" />
+      
+      <select id="specialization">
+          <option value="">Select Specialization</option>
+          <option value="Dermatologist">Dermatologist</option>
+          <option value="Dentist">Dentist</option>
+        <option value="Gynecologist">Gynecologist</option>
+    </select>
+      
+    <input placeholder="Experience" type="number" id="experience" />
+    <br>
+    <input placeholder="Email" type="email" id="email" />
+    <br>
+    <input placeholder="Mobile No." type="number" id="mobile" />
+    <br>
+    <input type="submit" value="Submit" />
+    <br>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Doctor ID</th>
+            <th>Specialization</th>
+            <th>Experience in Years</th>
+            <th>Email</th>
+            <th>Mobile No</th>
+            <th>Role</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Append Rows here using JS & DOM  -->
+    </tbody>
+</table>
+</div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector("form");
+  const tableBody = document.querySelector("tbody");
+
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    let name = document.getElementById("name").value;
+    let DocID = document.getElementById("doctor_id").value; // Corrected the ID
+    let sp = document.getElementById("specialization").value;
+    let exp = document.getElementById("experience").value;
+    let email = document.getElementById("email").value;
+    let mbl = document.getElementById("mobile").value;
+
+    if (name && DocID && sp && exp && email && mbl) {
+      const newRow = document.createElement("tr");
+
+      const newname = document.createElement("td");
+      newname.textContent = name;
+
+      const newDocID = document.createElement("td");
+      newDocID.textContent = DocID;
+
+      const newsp = document.createElement("td");
+      newsp.textContent = sp;
+
+      const newExp = document.createElement("td");
+      newExp.textContent = exp;
+
+      const newEmail = document.createElement("td");
+      newEmail.textContent = email;
+
+      const newMbl = document.createElement("td");
+      newMbl.textContent = mbl;
+
+      const newRole = document.createElement("td");
+      newRole.textContent = getRole(exp);
+
+      const newDelete = document.createElement("td");
+      newDelete.style.backgroundColor = 'red';
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = 'Delete';
+      deleteButton.style.backgroundColor = 'red';
+
+      deleteButton.onclick = function() {
+        const row = this.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      };
+
+      newDelete.appendChild(deleteButton);
+
+      newRow.appendChild(newname);
+      newRow.appendChild(newDocID);
+      newRow.appendChild(newsp);
+      newRow.appendChild(newExp);
+      newRow.appendChild(newEmail);
+      newRow.appendChild(newMbl);
+      newRow.appendChild(newRole);
+      newRow.appendChild(newDelete);
+
+      tableBody.appendChild(newRow);
+
+      document.getElementById("name").value = '';
+      document.getElementById("doctor_id").value = ''; // Corrected the ID
+      document.getElementById("specialization").value = '';
+      document.getElementById("experience").value = '';
+      document.getElementById("email").value = '';
+      document.getElementById("mobile").value = '';
+    } else {
+      alert('Please fill in all inputs');
+    }
+  });
+
+  function getRole(experience) {
+    if (experience > 5) {
+      return 'Senior';
+    } else if (experience >= 2 && experience <= 5) {
+      return 'Junior';
+    } else {
+      return 'Fresher';
+    }
+  }
+});
+
+</script>
+</html>
